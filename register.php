@@ -27,6 +27,9 @@ include 'header.php';
 
 include 'navbar.php';
 
+include "Input.php";
+
+include "Request.php";
 ?>
 
     <div class="pt-5">
@@ -40,64 +43,35 @@ include 'navbar.php';
             </section>
 
             <div class="bg-white p-5">
-                
+
                 <?php
                 if (isset($_SESSION['errors'])):
                     if (count($_SESSION['errors']) > 0) {
                         ?>
                         <div class="alert alert-danger" role="alert">
-                            <p><strong>Form'da bazı hatalarla karşılaşıldı!</strong></p>
-
-                            <ul>
-                                <?php
-                                foreach ($_SESSION['errors'] as $error):
-                                    ?>
-                                    <li><?php echo $error['message']; ?></li>
-                                <?php
-                                endforeach;
-                                ?>
-                            </ul>
+                            <strong>Form'da bazı hatalarla karşılaşıldı!</strong>
                         </div>
                 <?php
                 } else {
                 ?>
                         <div class="alert alert-success" role="alert">
-                            <p><strong>Tebrikler! Potterhead'e hoş geldiniz!</strong></p>
+                            <strong>Tebrikler! Potterhead'e hoş geldiniz!</strong>
                         </div>
                 <?php
                 }
                 endif;
                 ?>
 
-                <?php if($showForm): ?>
-                <form name="registerForm" method="POST" action="action.php">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">İsim Soyisim</label>
-                        <input name="fullname" value="<?php echo $inputs['fullname']; ?>" type="text"
-                               class="form-control" id="exampleInputEmail1">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Eposta Adresi</label>
-                        <input name="email" value="<?php echo $inputs['email']; ?>" type="email" class="form-control"
-                               id="exampleInputEmail1">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Bina Seç</label>
-                        <select name="house_id" class="form-control" id="exampleFormControlSelect1">
-                            <?php foreach ($config['validHouses'] as $houseId => $house): ?>
-                                <option <?php if ($houseId == $inputs['house_id']) {
-                                    echo 'selected="selected"';
-                                } ?> value="<?php echo $houseId; ?>"><?php echo ucfirst($house); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Parola</label>
-                        <input name="password" type="password" class="form-control" id="exampleInputPassword1">
-                    </div>
-                    <button name="submit" value="1" type="submit" class="btn btn-primary">Kayıt Ol</button>
-                </form>
-                <?php endif; ?>
+                <?php if ($showForm): ?>
+                    <form name="registerForm" method="POST" action="action.php">
+						<?php
+						Input::text("İsim Soyisim", "fullname", $inputs['fullname']);
+						Input::text("Eposta Adresi", "email", $inputs['email'], ["type" => "email"]);
+						Input::select("Bina","house_id", $inputs['house_id'],$config['validHouses'],["asd"=>"asd"]);
+						Input::text("Parola", "password", "", ["type" => "password"]); ?>
+                        <button name="submit" value="1" type="submit" class="btn btn-primary">Kayıt Ol</button>
+                    </form>
+				<?php endif; ?>
             </div>
         </div>
     </div>
